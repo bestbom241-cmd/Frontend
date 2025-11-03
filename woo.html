@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ง้อแฟน — ขอโทษจากใจ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#fff5f7;--card:#ffffff;--accent:#ff6b6b;--muted:#6b7280}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Kanit,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:linear-gradient(180deg,#fff5f7,#fffaf0);color:#111}
+    .wrap{max-width:980px;margin:28px auto;padding:18px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{margin:0;font-size:1.4rem}
+    p.lead{margin:4px 0 0;color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:18px;margin-top:18px}
+    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 8px 30px rgba(15,23,42,0.06);border:1px solid rgba(0,0,0,0.04)}
+
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input[type=text], textarea, select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);font-size:0.98rem}
+    textarea{resize:vertical}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+    .btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)}
+
+    /* preview card */
+    .preview-wrap{display:flex;align-items:center;justify-content:center;height:100%}
+    .card.preview{width:100%;max-width:360px;text-align:center;padding:28px;background:linear-gradient(180deg,#fff,#fffaf2);border-radius:16px}
+    .heart{width:84px;height:84px;margin:0 auto 8px;display:grid;place-items:center}
+    .heart svg{width:84px;height:84px}
+    .to{font-weight:700;margin-top:6px}
+    .message{white-space:pre-wrap;margin-top:12px;color:#333}
+    .from{margin-top:18px;font-size:0.95rem;color:var(--muted)}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
+
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.preview-wrap{order:-1}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>ทำเว็บง้อแฟน — ขอโทษจากใจ</h1>
+        <p class="lead">กรอกข้อความด้านซ้าย แล้วกด "แสดง" เพื่อดูการ์ดง้อ สามารถพิมพ์หรือดาวน์โหลดผ่านปุ่มพิมพ์</p>
+      </div>
+      <div>
+        <button class="btn" onclick="document.getElementById('form').scrollIntoView({behavior:'smooth'})">เริ่ม</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <form id="form" onsubmit="event.preventDefault(); applyPreview();">
+          <div>
+            <label for="to">ถึง (ชื่อแฟน)</label>
+            <input id="to" type="text" placeholder="เช่น น้องเอ๋ย, แก้ว, ..." value="ที่รัก">
+          </div>
+
+          <div style="margin-top:12px">
+            <label for="message">ข้อความ (บอกเหตุผลและขอโทษ)</label>
+            <textarea id="message" rows="6" placeholder="ขอโทษที่... ฉันเสียใจจริงๆ...">ขอโทษนะคะ ที่ทำให้เสียใจ พี่รักและอยากแก้ไข เรามาคุยกันได้ไหม?</textarea>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <div style="flex:1">
+              <label for="from">ลงชื่อ</label>
+              <input id="from" type="text" placeholder="ชื่อผู้ส่ง" value="จากใจของฉัน">
+            </div>
+            <div style="width:110px">
+              <label for="style">โทนสี</label>
+              <select id="style">
+                <option value="#ff6b6b">หวาน (แดง)</option>
+                <option value="#7c3aed">อบอุ่น (ม่วง)</option>
+                <option value="#0ea5a3">เย็นสบาย (เขียว)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="btn" type="submit">แสดง</button>
+            <button type="button" class="btn ghost" onclick="doPrint()">พิมพ์ / บันทึกเป็น PDF</button>
+            <button type="button" class="btn ghost" onclick="copyMessage()">คัดลอกข้อความ</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="preview-wrap">
+        <div class="card preview" id="previewCard">
+          <div class="heart" id="heartWrap">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.35-9.5-7.5C-1 8 5 3 7.5 5.5 9 7 12 10 12 10s3-3 4.5-4.5C19 3 25 8 21.5 13.5 19 16.65 12 21 12 21z" fill="#ff6b6b" id="heartFill"/></svg>
+          </div>
+          <div class="to" id="previewTo">ถึง: ที่รัก</div>
+          <div class="message" id="previewMessage">ขอโทษนะคะ ที่ทำให้เสียใจ พี่รักและอยากแก้ไข เรามาคุยกันได้ไหม?</div>
+          <div class="from" id="previewFrom">จากใจของฉัน</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>เพื่อความเป็นส่วนตัว หน้าเว็บนี้ทำงานทั้งหมดในเครื่องคุณ — ข้อมูลจะไม่ถูกส่งออก</footer>
+  </div>
+
+  <script>
+    // apply form values to preview
+    function applyPreview(){
+      var to = document.getElementById('to').value || 'ที่รัก';
+      var msg = document.getElementById('message').value || '';
+      var from = document.getElementById('from').value || '';
+      var tone = document.getElementById('style').value || '#ff6b6b';
+      document.getElementById('previewTo').textContent = 'ถึง: ' + to;
+      document.getElementById('previewMessage').textContent = msg;
+      document.getElementById('previewFrom').textContent = from;
+      document.getElementById('heartFill').setAttribute('fill', tone);
+      // subtle pulse
+      var heart = document.getElementById('heartWrap');
+      heart.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:700,easing:'ease-in-out'});
+    }
+
+    function doPrint(){
+      // hide controls for print
+      var controls = document.querySelectorAll('form .controls, header .btn');
+      controls.forEach(c=>c.style.visibility='hidden');
+      window.print();
+      controls.forEach(c=>c.style.visibility='visible');
+    }
+
+    function copyMessage(){
+      var to = document.getElementById('to').value || 'ที่รัก';
+      var msg = document.getElementById('message').value || '';
+      var from = document.getElementById('from').value || '';
+      var full = to + '\n\n' + msg + '\n\n' + from;
+      navigator.clipboard && navigator.clipboard.writeText(full).then(function(){
+        alert('คัดลอกข้อความเรียบร้อย — วางเพื่อส่งให้แฟนได้เลย');
+      }, function(){
+        prompt('คัดลอกข้อความด้านล่าง:', full);
+      });
+    }
+
+    // initialize preview from defaults
+    applyPreview();
+
+    // optional: populate from URL params (so user can share a crafted url)
+    (function(){
+      try{
+        var params = new URLSearchParams(location.search);
+        if(params.has('to')) document.getElementById('to').value = params.get('to');
+        if(params.has('message')) document.getElementById('message').value = params.get('message');
+        if(params.has('from')) document.getElementById('from').value = params.get('from');
+        if(params.has('tone')) document.getElementById('style').value = params.get('tone');
+        applyPreview();
+      }catch(e){/* ignore */}
+    })();
+  </script>
+</body>
+</html>

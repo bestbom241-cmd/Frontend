@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>หน้าแรกสวยงาม — ตัวอย่าง</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg1: #0f172a; /* dark navy */
+            --bg2: #0ea5a3; /* teal */
+            --card: rgba(255,255,255,0.06);
+            --glass: rgba(255,255,255,0.06);
+            --muted: rgba(255,255,255,0.68);
+            --accent: #ffd166;
+            color-scheme: dark;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+        body{
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(14,165,163,0.12), transparent 10%),
+                                    linear-gradient(180deg,var(--bg1), #071224);
+            color: white; -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            padding:24px;
+        }
+        .container{max-width:1100px;margin:0 auto}
+
+        header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+        .brand{display:flex;align-items:center;gap:12px}
+        .logo{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--bg2),#7dd3fc);box-shadow:0 6px 18px rgba(14,165,163,0.12)}
+        .logo svg{width:26px;height:26px}
+        h1{margin:0;font-size:1.25rem}
+        p.lead{margin:6px 0 0;color:var(--muted)}
+
+        main{display:grid;grid-template-columns:1fr 380px;gap:28px;margin-top:28px}
+        .card{background:var(--card);padding:22px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+
+        .hero{padding:28px;border-radius:12px;background:linear-gradient(135deg, rgba(14,165,163,0.06), rgba(125,211,252,0.02));}
+        .hero h2{margin:0 0 8px;font-size:1.6rem}
+        .cta{margin-top:16px;display:flex;gap:12px}
+        .btn{background:var(--bg2);color:#052025;padding:10px 16px;border-radius:10px;font-weight:600;border:none;cursor:pointer}
+        .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+        .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+        .feature{display:flex;gap:12px;align-items:flex-start}
+        .feature .ico{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);display:grid;place-items:center}
+        .feature h4{margin:0;font-size:0.98rem}
+        .feature p{margin:4px 0 0;color:var(--muted);font-size:0.92rem}
+
+        aside .sidebar-list{display:flex;flex-direction:column;gap:12px}
+        .small{font-size:0.9rem;color:var(--muted)}
+
+        footer{margin-top:28px;text-align:center;color:var(--muted);font-size:0.9rem}
+
+        /* Responsive */
+        @media (max-width:900px){
+            main{grid-template-columns:1fr}
+            aside{order:2}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <div class="logo" aria-hidden>
+                    <!-- simple geometric icon -->
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="4" fill="#052025" opacity="0.12"/><path d="M7 12h10M12 7v10" stroke="#ffd166" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                    <h1>เว็บไซต์ตัวอย่าง สวยๆ</h1>
+                    <p class="lead">หน้าตัวอย่าง responsive, เบา และอ่านภาษาไทยได้เรียบร้อย</p>
+                </div>
+            </div>
+            <nav>
+                <button class="btn" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">ติดต่อ</button>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <div class="card hero">
+                    <h2>ยินดีต้อนรับ — สร้างเว็บสวยได้เร็ว</h2>
+                    <p class="small">นี่คือตัวอย่างหน้า Landing Page ที่ออกแบบให้ดูทันสมัย ใช้สีเรียบและไอคอนเล็กๆ เพื่อความเป็นมืออาชีพ</p>
+                    <div class="cta">
+                        <button class="btn" onclick="alert('ขอบคุณที่สนใจ!')">เริ่มต้น</button>
+                        <button class="btn ghost" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">ดูเพิ่มเติม</button>
+                    </div>
+
+                    <div class="features">
+                        <div class="feature">
+                            <div class="ico"><svg width="20"height="20"viewBox="0 0 24 24"fill="none"><path d="M12 2v20" stroke="#7dd3fc" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+                            <div>
+                                <h4>เร็วและเบา</h4>
+                                <p>ไม่มีไลบรารีหนัก ใช้แค่ HTML/CSS/JS เล็กๆ</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="ico"><svg width="20"height="20"viewBox="0 0 24 24"fill="none"><path d="M3 12h18" stroke="#ffd166" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+                            <div>
+                                <h4>Responsive</h4>
+                                <p>ปรับขนาดอัตโนมัติบนมือถือและเดสก์ท็อป</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="ico"><svg width="20"height="20"viewBox="0 0 24 24"fill="none"><circle cx="12" cy="12" r="3" stroke="#7dd3fc" stroke-width="1.6"/></svg></div>
+                            <div>
+                                <h4>ปรับแต่งได้ง่าย</h4>
+                                <p>แก้สี ข้อความ และปุ่มได้อย่างรวดเร็ว</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="ico"><svg width="20"height="20"viewBox="0 0 24 24"fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#ffd166" stroke-width="1.6"/></svg></div>
+                            <div>
+                                <h4>พร้อมนำไปใช้</h4>
+                                <p>คัดลอกไฟล์นี้ไปวางบนเซิร์ฟเวอร์ได้ทันที</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contact" class="card" style="margin-top:16px">
+                    <h3>ติดต่อเรา</h3>
+                    <p class="small">ส่งข้อความสั้น ๆ มาได้เลย — ตัวอย่างนี้จะไม่ส่งข้อมูลออกจากเครื่อง</p>
+                    <form onsubmit="event.preventDefault(); alert('ส่งสำเร็จ! (ตัวอย่าง)');" style="display:grid;gap:8px;margin-top:10px">
+                        <input placeholder="ชื่อ" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+                        <input placeholder="อีเมล" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+                        <textarea placeholder="ข้อความ" rows="4" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit"></textarea>
+                        <div style="display:flex;gap:8px">
+                            <button class="btn" type="submit">ส่งข้อความ</button>
+                            <button class="btn ghost" type="button" onclick="document.querySelector('form').reset()">รีเซ็ต</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <aside>
+                <div class="card">
+                    <h3>ข้อมูลด่วน</h3>
+                    <div class="sidebar-list" style="margin-top:8px">
+                        <div>
+                            <strong>สถานะ:</strong> <span class="small">ตัวอย่าง (ไม่เชื่อมต่อระบบใดๆ)</span>
+                        </div>
+                        <div>
+                            <strong>ใช้ได้กับ:</strong> <span class="small">มือถือ, แท็บเล็ต, เดสก์ท็อป</span>
+                        </div>
+                        <div>
+                            <strong>ไฟล์:</strong> <span class="small">`index.html` เดียว — ไม่มี dependencies</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            © ตัวอย่างเว็บไซต์ — ปรับแต่งได้ตามต้องการ
+        </footer>
+    </div>
+
+    <script>
+        // Small UX helpers
+        (function(){
+            // prefer-reduced-motion respect
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            // subtle entrance animation
+            document.querySelectorAll('.card').forEach(function(el,i){
+                el.style.opacity=0;el.style.transform='translateY(8px)';
+                setTimeout(function(){el.style.transition='opacity .45s ease,transform .45s ease';el.style.opacity=1;el.style.transform='none'}, 90*i);
+            });
+        })();
+    </script>
+</body>
+</html>
