@@ -3,154 +3,174 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ง้อแฟน — ขอโทษจากใจ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    :root{--bg:#fff5f7;--card:#ffffff;--accent:#ff6b6b;--muted:#6b7280}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Kanit,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:linear-gradient(180deg,#fff5f7,#fffaf0);color:#111}
-    .wrap{max-width:980px;margin:28px auto;padding:18px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    h1{margin:0;font-size:1.4rem}
-    p.lead{margin:4px 0 0;color:var(--muted)}
+  <title>Post-it บอกรักง้อแฟน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+  <!doctype html>
+  <html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>สร้างโปสการ์ดบอกรัก/ง้อแฟน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #f8f8f8;
+        --card1: linear-gradient(135deg,#fffbe7 60%,#ffd6e0 100%);
+        --card2: linear-gradient(135deg,#e0f7fa 60%,#d1c4e9 100%);
+        --card3: linear-gradient(135deg,#fffde4 60%,#d3f9d8 100%);
+        --muted: #6b7280;
+        --accent: #ff6b6b;
+      }
+      html,body { height:100%; margin:0; font-family:Kanit,system-ui,sans-serif; background:var(--bg); }
+      body { min-height:100vh; }
+      .container { max-width:700px; margin:0 auto; padding:24px; }
+      header { text-align:center; margin-bottom:18px; }
+      h1 { font-size:2rem; margin:0; }
+      p.lead { color:var(--muted); margin:8px 0 0; }
 
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:18px;margin-top:18px}
-    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 8px 30px rgba(15,23,42,0.06);border:1px solid rgba(0,0,0,0.04)}
+      .form-card { background:white; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.08); padding:22px; margin-bottom:18px; }
+      .form-row { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:12px; }
+      .form-row label { font-weight:600; margin-bottom:4px; }
+      .form-row input, .form-row textarea, .form-row select {
+        font-size:1rem; padding:10px; border-radius:8px; border:1px solid #eee; font-family:inherit; width:100%;
+      }
+      .form-row textarea { resize:vertical; min-height:60px; }
+      .form-row select { max-width:180px; }
+      .btn { background:var(--accent); color:white; border:none; border-radius:8px; padding:10px 18px; font-weight:700; cursor:pointer; margin-top:8px; }
 
-    label{display:block;font-weight:600;margin-bottom:6px}
-    input[type=text], textarea, select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);font-size:0.98rem}
-    textarea{resize:vertical}
-    .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
-    .btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)}
+      .preview-wrap { display:flex; justify-content:center; align-items:center; margin-bottom:18px; }
+      .postcard {
+        width:380px; height:240px; border-radius:18px; box-shadow:0 8px 32px rgba(0,0,0,0.10);
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        padding:28px 22px; position:relative; background:var(--card1);
+        transition:background .3s;
+      }
+      .postcard.theme1 { background:var(--card1); }
+      .postcard.theme2 { background:var(--card2); }
+      .postcard.theme3 { background:var(--card3); }
+      .postcard .icon { font-size:2.2rem; margin-bottom:10px; }
+      .postcard .msg { font-size:1.18rem; text-align:center; margin-bottom:10px; white-space:pre-line; color:#222; }
+      .postcard .from { font-size:1.05rem; color:var(--muted); margin-top:10px; }
+      .postcard .border { position:absolute; inset:0; border:2.5px dashed #ffd6e0; border-radius:18px; pointer-events:none; }
 
-    /* preview card */
-    .preview-wrap{display:flex;align-items:center;justify-content:center;height:100%}
-    .card.preview{width:100%;max-width:360px;text-align:center;padding:28px;background:linear-gradient(180deg,#fff,#fffaf2);border-radius:16px}
-    .heart{width:84px;height:84px;margin:0 auto 8px;display:grid;place-items:center}
-    .heart svg{width:84px;height:84px}
-    .to{font-weight:700;margin-top:6px}
-    .message{white-space:pre-wrap;margin-top:12px;color:#333}
-    .from{margin-top:18px;font-size:0.95rem;color:var(--muted)}
+      @media (max-width:500px) {
+        .container { padding:6px; }
+        .postcard { width:98vw; height:180px; padding:12px 4vw; }
+      }
+      footer { text-align:center; color:var(--muted); margin-top:28px; font-size:0.95rem; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>สร้างโปสการ์ดบอกรัก/ง้อแฟน</h1>
+        <p class="lead">ใส่คำพูด เลือกธีม แล้วดาวน์โหลดเป็น JPEG card สวยๆ ส่งให้แฟนได้ทันที</p>
+      </header>
 
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
-
-    @media (max-width:880px){.grid{grid-template-columns:1fr}.preview-wrap{order:-1}}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <div>
-        <h1>ทำเว็บง้อแฟน — ขอโทษจากใจ</h1>
-        <p class="lead">กรอกข้อความด้านซ้าย แล้วกด "แสดง" เพื่อดูการ์ดง้อ สามารถพิมพ์หรือดาวน์โหลดผ่านปุ่มพิมพ์</p>
-      </div>
-      <div>
-        <button class="btn" onclick="document.getElementById('form').scrollIntoView({behavior:'smooth'})">เริ่ม</button>
-      </div>
-    </header>
-
-    <div class="grid">
-      <section class="card">
-        <form id="form" onsubmit="event.preventDefault(); applyPreview();">
-          <div>
-            <label for="to">ถึง (ชื่อแฟน)</label>
-            <input id="to" type="text" placeholder="เช่น น้องเอ๋ย, แก้ว, ..." value="ที่รัก">
+      <div class="form-card">
+        <form id="cardForm" autocomplete="off" onsubmit="event.preventDefault();updatePreview();">
+          <div class="form-row">
+            <label for="cardMsg">ข้อความบนโปสการ์ด</label>
+            <textarea id="cardMsg" placeholder="ใส่ข้อความรัก ขอโทษ หรือให้กำลังใจแฟน" rows="3">ขอโทษนะคะ ที่ทำให้เสียใจ พี่รักและอยากแก้ไข เรามาคุยกันได้ไหม?</textarea>
           </div>
-
-          <div style="margin-top:12px">
-            <label for="message">ข้อความ (บอกเหตุผลและขอโทษ)</label>
-            <textarea id="message" rows="6" placeholder="ขอโทษที่... ฉันเสียใจจริงๆ...">ขอโทษนะคะ ที่ทำให้เสียใจ พี่รักและอยากแก้ไข เรามาคุยกันได้ไหม?</textarea>
+          <div class="form-row">
+            <label for="cardFrom">ลงชื่อ (จากใคร)</label>
+            <input id="cardFrom" type="text" placeholder="จากใจของฉัน" value="จากใจของฉัน" />
           </div>
-
-          <div style="margin-top:12px;display:flex;gap:8px">
-            <div style="flex:1">
-              <label for="from">ลงชื่อ</label>
-              <input id="from" type="text" placeholder="ชื่อผู้ส่ง" value="จากใจของฉัน">
-            </div>
-            <div style="width:110px">
-              <label for="style">โทนสี</label>
-              <select id="style">
-                <option value="#ff6b6b">หวาน (แดง)</option>
-                <option value="#7c3aed">อบอุ่น (ม่วง)</option>
-                <option value="#0ea5a3">เย็นสบาย (เขียว)</option>
-              </select>
-            </div>
+          <div class="form-row">
+            <label for="cardTheme">ธีมโปสการ์ด</label>
+            <select id="cardTheme">
+              <option value="theme1">หวานสดใส</option>
+              <option value="theme2">ฟ้า-ม่วงอบอุ่น</option>
+              <option value="theme3">เขียว-เหลืองสดชื่น</option>
+            </select>
           </div>
-
-          <div class="controls">
-            <button class="btn" type="submit">แสดง</button>
-            <button type="button" class="btn ghost" onclick="doPrint()">พิมพ์ / บันทึกเป็น PDF</button>
-            <button type="button" class="btn ghost" onclick="copyMessage()">คัดลอกข้อความ</button>
-          </div>
+          <button class="btn" type="submit">แสดงตัวอย่าง</button>
         </form>
-      </section>
+      </div>
 
-      <aside class="preview-wrap">
-        <div class="card preview" id="previewCard">
-          <div class="heart" id="heartWrap">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.35-9.5-7.5C-1 8 5 3 7.5 5.5 9 7 12 10 12 10s3-3 4.5-4.5C19 3 25 8 21.5 13.5 19 16.65 12 21 12 21z" fill="#ff6b6b" id="heartFill"/></svg>
-          </div>
-          <div class="to" id="previewTo">ถึง: ที่รัก</div>
-          <div class="message" id="previewMessage">ขอโทษนะคะ ที่ทำให้เสียใจ พี่รักและอยากแก้ไข เรามาคุยกันได้ไหม?</div>
+      <div class="preview-wrap">
+        <div class="postcard theme1" id="postcardPreview">
+          <div class="border"></div>
+          <div class="icon">💌</div>
+          <div class="msg" id="previewMsg">ขอโทษนะคะ ที่ทำให้เสียใจ พี่รักและอยากแก้ไข เรามาคุยกันได้ไหม?</div>
           <div class="from" id="previewFrom">จากใจของฉัน</div>
         </div>
-      </aside>
+      </div>
+      <div style="text-align:center">
+        <button class="btn" onclick="downloadCardAsImage()">ดาวน์โหลดเป็น JPEG card</button>
+      </div>
+
+      <footer>โปสการ์ดนี้สร้างและดาวน์โหลดในเครื่องคุณเท่านั้น (ไม่มีการส่งข้อมูลออก)</footer>
     </div>
 
-    <footer>เพื่อความเป็นส่วนตัว หน้าเว็บนี้ทำงานทั้งหมดในเครื่องคุณ — ข้อมูลจะไม่ถูกส่งออก</footer>
-  </div>
+    <script>
+      function updatePreview() {
+        const msg = document.getElementById('cardMsg').value.trim();
+        const from = document.getElementById('cardFrom').value.trim();
+        const theme = document.getElementById('cardTheme').value;
+        document.getElementById('previewMsg').textContent = msg || '';
+        document.getElementById('previewFrom').textContent = from || '';
+        const card = document.getElementById('postcardPreview');
+        card.className = 'postcard ' + theme;
+      }
+      // update preview on input
+      document.getElementById('cardMsg').addEventListener('input', updatePreview);
+      document.getElementById('cardFrom').addEventListener('input', updatePreview);
+      document.getElementById('cardTheme').addEventListener('change', updatePreview);
 
-  <script>
-    // apply form values to preview
-    function applyPreview(){
-      var to = document.getElementById('to').value || 'ที่รัก';
-      var msg = document.getElementById('message').value || '';
-      var from = document.getElementById('from').value || '';
-      var tone = document.getElementById('style').value || '#ff6b6b';
-      document.getElementById('previewTo').textContent = 'ถึง: ' + to;
-      document.getElementById('previewMessage').textContent = msg;
-      document.getElementById('previewFrom').textContent = from;
-      document.getElementById('heartFill').setAttribute('fill', tone);
-      // subtle pulse
-      var heart = document.getElementById('heartWrap');
-      heart.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:700,easing:'ease-in-out'});
+      // Download as JPEG
+      window.downloadCardAsImage = function() {
+        const card = document.getElementById('postcardPreview');
+        html2canvas(card, {backgroundColor: null, scale:2}).then(function(canvas) {
+          const link = document.createElement('a');
+          link.download = 'postcard.jpg';
+          link.href = canvas.toDataURL('image/jpeg', 0.95);
+          link.click();
+        });
+      };
+
+      // Initial preview
+      updatePreview();
+    </script>
+  </body>
+  </html>
+    document.getElementById('board').addEventListener('dragover', function(e) {
+      e.preventDefault();
+    });
+    document.getElementById('board').addEventListener('drop', function(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain');
+      const boardRect = this.getBoundingClientRect();
+      const x = e.clientX - boardRect.left - 90;
+      const y = e.clientY - boardRect.top - 20;
+      const note = notes.find(n => n.id === id);
+      if (note) {
+        note.x = Math.max(0, Math.min(x, this.offsetWidth - 180));
+        note.y = Math.max(0, Math.min(y, this.offsetHeight - 120));
+        note.z = ++zIndex;
+        renderNotes();
+      }
+    });
+
+    // Delete note
+    function deleteNote(id) {
+      notes = notes.filter(n => n.id !== id);
+      renderNotes();
     }
 
-    function doPrint(){
-      // hide controls for print
-      var controls = document.querySelectorAll('form .controls, header .btn');
-      controls.forEach(c=>c.style.visibility='hidden');
-      window.print();
-      controls.forEach(c=>c.style.visibility='visible');
-    }
+    // Responsive: re-randomize positions if window resized (optional)
+    window.addEventListener('resize', function() {
+      for (const note of notes) {
+        note.x = Math.max(0, Math.min(note.x, document.getElementById('board').offsetWidth - 180));
+        note.y = Math.max(0, Math.min(note.y, document.getElementById('board').offsetHeight - 120));
+      }
+      renderNotes();
+    });
 
-    function copyMessage(){
-      var to = document.getElementById('to').value || 'ที่รัก';
-      var msg = document.getElementById('message').value || '';
-      var from = document.getElementById('from').value || '';
-      var full = to + '\n\n' + msg + '\n\n' + from;
-      navigator.clipboard && navigator.clipboard.writeText(full).then(function(){
-        alert('คัดลอกข้อความเรียบร้อย — วางเพื่อส่งให้แฟนได้เลย');
-      }, function(){
-        prompt('คัดลอกข้อความด้านล่าง:', full);
-      });
-    }
-
-    // initialize preview from defaults
-    applyPreview();
-
-    // optional: populate from URL params (so user can share a crafted url)
-    (function(){
-      try{
-        var params = new URLSearchParams(location.search);
-        if(params.has('to')) document.getElementById('to').value = params.get('to');
-        if(params.has('message')) document.getElementById('message').value = params.get('message');
-        if(params.has('from')) document.getElementById('from').value = params.get('from');
-        if(params.has('tone')) document.getElementById('style').value = params.get('tone');
-        applyPreview();
-      }catch(e){/* ignore */}
-    })();
+    // Initial render
+    renderNotes();
   </script>
 </body>
 </html>
