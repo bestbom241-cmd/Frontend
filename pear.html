@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Best × Pear — Our Story Portfolio</title>
+  <meta name="description" content="A single‑file portfolio telling the history of Best × Pear — milestones, trips, and tiny moments that matter." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a12;
+      --fg: #e6f0ff;
+      --muted: #9fb0cc;
+      --card: rgba(255,255,255,0.06);
+      --stroke: rgba(255,255,255,0.12);
+      --accent: #7df9ff; /* electric cyan */
+      --accent2: #a855f7; /* violet */
+      --glow: 0 0 24px rgba(125, 249, 255, .65);
+    }
+    [data-theme="light"] {
+      --bg: #fafcff;
+      --fg: #0b1020;
+      --muted: #2f3a55;
+      --card: rgba(0,0,0,0.04);
+      --stroke: rgba(0,0,0,0.08);
+      --accent: #0066ff;
+      --accent2: #14b8a6;
+      --glow: 0 0 20px rgba(0, 102, 255, .35);
+    }
+
+    html, body {
+      margin: 0; height: 100%; overflow-x: hidden; background: var(--bg); color: var(--fg);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+    * { box-sizing: border-box; }
+    a { color: inherit; text-decoration: none; }
+
+    /* --- Background WebGL canvas --- */
+    #bg {
+      position: fixed; inset: 0; z-index: -2; display: block; background: radial-gradient(1200px 800px at 70% 10%, rgba(125,249,255,.12), transparent 60%),
+                  radial-gradient(900px 600px at 20% 80%, rgba(168,85,247,.10), transparent 60%),
+                  var(--bg);
+      filter: saturate(1.1);
+    }
+
+    /* --- Soft grain + subtle scanlines for a tech vibe --- */
+    .fx {
+      pointer-events: none; position: fixed; inset: 0; z-index: -1; opacity: .25;
+      background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 1px, transparent 1px 2px),
+                        radial-gradient(circle at 10% 10%, rgba(255,255,255,.03), transparent 40%),
+                        radial-gradient(circle at 90% 70%, rgba(255,255,255,.02), transparent 45%);
+      mix-blend-mode: soft-light;
+    }
+
+    /* --- Cursor spotlight --- */
+    .spotlight {
+      position: fixed; inset: -200vh; z-index: -1; pointer-events: none;
+      background: radial-gradient(400px 400px at var(--x,50%) var(--y,50%), rgba(125,249,255,.08), transparent 60%);
+      transition: background-position .06s linear;
+    }
+
+    /* --- Layout --- */
+    .wrap { width: min(1200px, 92vw); margin: 0 auto; }
+
+    header.nav {
+      position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(1.2) blur(10px);
+      background: linear-gradient(180deg, rgba(10,12,20,.55), rgba(10,12,20,.12));
+      border-bottom: 1px solid var(--stroke);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: "Space Grotesk", Inter, sans-serif; }
+    .brand .logo { width: 28px; height: 28px; border-radius: 8px; background: conic-gradient(from 210deg, var(--accent), var(--accent2), var(--accent)); filter: drop-shadow(var(--glow)); }
+    .brand .title { font-weight: 700; letter-spacing: .5px; }
+    .nav-links { display: flex; gap: 18px; align-items: center; }
+    .nav-links a { color: var(--muted); font-weight: 500; opacity: .9; }
+    .theme-toggle { border: 1px solid var(--stroke); background: var(--card); color: var(--fg); padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+    .theme-toggle:hover { box-shadow: var(--glow); }
+
+    /* --- Hero --- */
+    .hero { position: relative; display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; padding: 96px 0 72px; }
+    .hero h1 { font-family: "Space Grotesk", Inter, sans-serif; font-size: clamp(38px, 6vw, 68px); line-height: 1.02; margin: 0 0 12px; letter-spacing: -.5px; }
+    .hero p { color: var(--muted); font-size: clamp(16px, 2.2vw, 18px); margin: 0 0 22px; }
+    .cta { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-primary, .btn-ghost {
+      position: relative; border-radius: 16px; padding: 14px 18px; font-weight: 700; cursor: pointer; border: 1px solid var(--stroke);
+      background: var(--card); color: var(--fg); transition: transform .2s ease, box-shadow .2s ease; will-change: transform;
+    }
+    .btn-primary { background: linear-gradient(180deg, rgba(125,249,255,.25), rgba(125,249,255,.1)); box-shadow: var(--glow); }
+    .btn-primary::after { content: ""; position: absolute; inset: -1px; border-radius: 16px; padding: 1px; background: linear-gradient(120deg, var(--accent), transparent 30%, var(--accent2) 70%, transparent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+    .btn-primary:hover { transform: translateY(-2px) scale(1.01); }
+    .btn-ghost:hover { transform: translateY(-2px); }
+
+    /* --- Glass card --- */
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid var(--stroke); border-radius: 24px; padding: 22px; box-shadow: 0 10px 40px rgba(0,0,0,.25), var(--glow);
+    }
+
+    /* --- Features --- */
+    .section { padding: 84px 0; }
+    .kicker { color: var(--accent); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; font-size: 12px; display: inline-block; margin-bottom: 10px; }
+    h2 { font-family: "Space Grotesk", Inter, sans-serif; font-size: clamp(28px, 4.5vw, 42px); margin: 0 0 16px; }
+    .grid { display: grid; gap: 18px; grid-template-columns: repeat(1, minmax(0,1fr)); }
+    @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .card { position: relative; border-radius: 20px; padding: 20px; border: 1px solid var(--stroke); background: var(--card); overflow: hidden; transform-style: preserve-3d; will-change: transform;
+      transition: transform .2s ease, box-shadow .2s ease;}
+    .card:hover { box-shadow: 0 6px 40px rgba(0,0,0,.25), var(--glow); }
+    .card .badge { position: absolute; top: 10px; right: 10px; font-size: 11px; font-weight: 800; color: var(--accent); background: rgba(125,249,255,.08); border: 1px solid var(--stroke); padding: 6px 8px; border-radius: 999px; }
+    .card h3 { margin: 10px 0 8px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    /* --- Timeline --- */
+    .timeline { position: relative; margin-top: 8px; }
+    .timeline::before { content: ""; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: linear-gradient(var(--accent), transparent); opacity: .6; }
+    .step { position: relative; padding-left: 42px; margin: 18px 0; }
+    .step::before { content: ""; position: absolute; left: 6px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, var(--accent), var(--accent2)); box-shadow: var(--glow); }
+    .step h4 { margin: 0 0 6px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    /* --- Footer --- */
+    footer { padding: 60px 0 80px; color: var(--muted); font-size: 14px; }
+
+    /* --- Reveal --- */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* --- Reduced motion respect --- */
+    @media (prefers-reduced-motion: reduce) {
+      .btn-primary, .btn-ghost, .card { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="fx" aria-hidden="true"></div>
+  <div class="spotlight" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand" aria-label="NEON HYPER brand">
+        <div class="logo" role="img" aria-label="logo"></div>
+        <div class="title">Best × Pear</div>
+      </div>
+      <nav class="nav-links" aria-label="primary">
+        <a href="#features">Features</a>
+        <a href="#tech">Tech</a>
+        <a href="#cta">Get Started</a>
+        <button class="theme-toggle" id="themeBtn" aria-pressed="false" aria-label="Toggle theme">Toggle Theme</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <span class="kicker">OUR STORY</span>
+        <h1>Best × Pear — <span style="text-shadow: var(--glow); background: linear-gradient(120deg, var(--accent), var(--accent2)); -webkit-background-clip: text; color: transparent;">History in Moments</span></h1>
+        <p>พอร์ตโฟลิโอสไตล์อบอุ่นเล่าเส้นทางความสัมพันธ์ของเรา ตั้งแต่วันแรกที่เจอกัน ทริปแรก ความสำเร็จเล็กๆ และแพลนอนาคต — เก็บทุกโมเมนต์สำคัญไว้ในหน้านี้หน้าเดียว</p>
+        <div class="cta">
+          <a class="btn-primary" href="#timeline">ดูไทม์ไลน์ ↗</a>
+          <a class="btn-ghost" href="#gallery">แกลเลอรีความทรงจำ</a>
+        </div>
+      </div>
+      <div class="glass" style="min-height: 320px; display: grid; place-items:center; text-align:center;">
+        <div>
+          <h3 style="margin:0 0 6px;">Milestone Counter</h3>
+          <p style="margin:0 0 12px; color: var(--muted);"><span id="daysTogether">0</span> days together</p>
+          <p style="margin:0; color: var(--muted); font-size:13px;">(เริ่มนับจากวันที่เราเป็นแฟนกัน — เปลี่ยนวันที่ได้ในโค้ด)</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="highlights" class="section">
+      <span class="kicker">Highlights</span>
+      <h2>สิ่งที่ทำให้เราเป็นเรา</h2>
+      <div class="grid">
+        <article class="card tilt reveal">
+          <span class="badge">First</span>
+          <h3>ครั้งแรกที่เจอกัน</h3>
+          <p>จากคนแปลกหน้าเป็นเพื่อนสนิท ก่อนจะรู้ตัวว่าเราเข้ากันได้พอดีแบบไม่ต้องพยายาม</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Trip</span>
+          <h3>ทริปแรก</h3>
+          <p>บทพิสูจน์ว่าจังหวะก้าวเดินและสไตล์การเที่ยวของเราคือความลงตัวที่ชัดที่สุด</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Tiny</span>
+          <h3>ดีเทลเล็กๆ</h3>
+          <p>สติ๊กเกอร์แชท คำล้อเล่น เพลงโปรด แก้วกาแฟใบเดิม — สิ่งเล็กๆ ที่เป็นภาษาของเรา</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Grow</span>
+          <h3>เติบโตไปด้วยกัน</h3>
+          <p>ให้พื้นที่กันในวันที่ต้องโตแต่ยังเป็นที่พิงในวันที่อยากพัก</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Team</span>
+          <h3>เรา = ทีมเดียวกัน</h3>
+          <p>คุยกันตรงๆ เคารพกัน และแก้ปัญหาด้วยมุมมองทีม</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Future</span>
+          <h3>แผนข้างหน้า</h3>
+          <p>บ้านเล็กๆ มุมทำงาน มุมต้นไม้ และตั๋วไปญี่ปุ่นอีกหลายใบ</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="timeline" class="section">
+      <span class="kicker">Timeline</span>
+      <h2>ไทม์ไลน์ความสัมพันธ์</h2>
+      <div class="glass reveal">
+        <div class="timeline">
+          <div class="step">
+            <h4>Day 0 — First Hello</h4>
+            <p>ข้อความแรกที่ทำให้เรายิ้มทั้งวัน</p>
+          </div>
+          <div class="step">
+            <h4>Month 1 — First Date</h4>
+            <p>ร้านเล็ก เพลงดี อาหารธรรมดา แต่บรรยากาศดีที่สุด</p>
+          </div>
+          <div class="step">
+            <h4>Month 3 — First Trip</h4>
+            <p>ฝนตกก็สนุก รถติดก็ยังขำ เพราะไปด้วยกัน</p>
+          </div>
+          <div class="step">
+            <h4>Month 6 — Our Song</h4>
+            <p>เพลงที่เปิดแล้วนึกถึงหน้ากันโดยอัตโนมัติ</p>
+          </div>
+          <div class="step">
+            <h4>Year 1 — Milestone</h4>
+            <p>ย้อนอ่านแชทเก่าๆ แล้วภูมิใจในสิ่งที่เราช่วยกันผ่าน</p>
+          </div>
+          <div class="step">
+            <h4>Soon — Next Chapter</h4>
+            <p>วางแผนทริปใหญ่ และเริ่มเก็บความทรงจำบทใหม่</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section">
+      <span class="kicker">Gallery</span>
+      <h2>ความทรงจำที่อยากเปิดดูซ้ำ</h2>
+      <div class="grid">
+        <article class="card tilt reveal">
+          <span class="badge">Snap</span>
+          <h3>รูปคู่แรก</h3>
+          <p>ยังเขิน ๆ แต่ยิ้มเยอะมาก</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Cafe</span>
+          <h3>แก้วโปรดของ Pear</h3>
+          <p>ลาเต้ครึ่งหวาน ครึ่งใจเป็น Best</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="badge">Walk</span>
+          <h3>ทางเดิม ๆ</h3>
+          <p>แต่ไม่เคยเบื่อ เพราะจับมือกัน</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="cta" class="section">
+      <span class="kicker">Keep</span>
+      <h2>เก็บเรื่องราวต่อไป</h2>
+      <div class="cta">
+        <a class="btn-primary" href="#" onclick="alert('เพิ่มรูปและโน้ตใหม่เร็วๆ นี้ ✨'); return false;">เพิ่มโมเมนต์</a>
+        <a class="btn-ghost" href="#timeline">ย้อนดูไทม์ไลน์</a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="logo" style="width:16px;height:16px;border-radius:5px;"></div>
+          <span>Best × Pear — Our Story Portfolio · crafted as a single‑file site</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- three.js CDN (minimal, no build step) -->
+  <script src="https://unpkg.com/three@0.161.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.161.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    // ---- Theme toggle ----
+    const themeBtn = document.getElementById('themeBtn');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      root.setAttribute('data-theme', saved);
+      themeBtn.setAttribute('aria-pressed', saved === 'light');
+    }
+    themeBtn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      if (next === 'dark') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', next);
+      themeBtn.setAttribute('aria-pressed', next === 'light');
+    });
+
+    // ---- Cursor spotlight ----
+    const spot = document.querySelector('.spotlight');
+    window.addEventListener('pointermove', (e) => {
+      spot.style.setProperty('--x', e.clientX + 'px');
+      spot.style.setProperty('--y', e.clientY + 'px');
+    }, {passive: true});
+
+    // ---- Scroll reveal ----
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ---- Magnetic buttons ----
+    document.querySelectorAll('.btn-primary, .btn-ghost').forEach(btn => {
+      const strength = 18;
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - (r.left + r.width/2);
+        const y = e.clientY - (r.top + r.height/2);
+        btn.style.transform = `translate(${x/strength}px, ${y/strength}px)`;
+      });
+      btn.addEventListener('pointerleave', () => btn.style.transform = '');
+    });
+
+    // ---- 3D tilt cards ----
+    document.querySelectorAll('.tilt').forEach(card => {
+      let raf; const damp = 10;
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width * 2 - 1;
+        const y = (e.clientY - r.top) / r.height * 2 - 1;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          card.style.transform = `rotateX(${(-y)*6}deg) rotateY(${x*8}deg) translateZ(0)`;
+        });
+      });
+      card.addEventListener('pointerleave', () => card.style.transform = '');
+    });
+
+    // ---- WebGL starscape (three.js) ----
+    const canvas = document.getElementById('bg');
+    let renderer, scene, camera, controls, points;
+
+    function init() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 0, 42);
+
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // Particles
+      const count = 2200; // keep smooth
+      const geo = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const r = 60 * Math.sqrt(Math.random());
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.sin(phi) * Math.sin(theta);
+        const z = r * Math.cos(phi);
+        positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
+        const c = new THREE.Color().setHSL(0.55 + Math.random()*0.1, 0.9, 0.6);
+        colors.set([c.r, c.g, c.b], i*3);
+      }
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const mat = new THREE.PointsMaterial({ size: 0.8, vertexColors: true, transparent: true, opacity: 0.95 });
+      points = new THREE.Points(geo, mat);
+      scene.add(points);
+
+      // Soft glow bloom-ish via additive sprite
+      const starGeo = new THREE.BufferGeometry();
+      starGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0,0,0]), 3));
+
+      // Orbit controls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true; controls.dampingFactor = 0.05;
+
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (points) points.rotation.y += 0.0008;
+      controls && controls.update();
+      renderer && renderer.render(scene, camera);
+    }
+
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener('resize', onResize);
+
+    try { init(); } catch (e) { console.warn('WebGL init failed', e); }
+  </script>
+</body>
+</html>
